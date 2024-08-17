@@ -99,8 +99,8 @@ WSGI_APPLICATION = "csc_app.wsgi.application"
 DATABASES = {
 	'default': {
 		'ENGINE': 'django.db.backends.mysql',
-		'NAME': 'admin2_anr',
-		'USER': 'admin2_cscadmin',
+		'NAME': 'cscadmin_anr',
+		'USER': 'cscadmin_admin',
 		'PASSWORD': 'cscadmin@123',
 		'HOST':'localhost',
 		'PORT':'3306',
@@ -207,9 +207,9 @@ SESSION_COOKIE_AGE = 10800
 #
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 DEFAULT_AUTO_FIELD = "django.db.models.AutoField"
-CSRF_TRUSTED_ORIGINS = ['https://vdm.csceducation.net']
+CSRF_TRUSTED_ORIGINS = ['https://anr.csceducation.net']
 # Site Default values
 AUTH_USER_MODEL = 'corecode.User'
-db = 'admin2_anr'
+db = 'cscadmin_anr'
 mongo_uri = 'mongodb://127.0.0.1:27017/?directConnection=true&serverSelectionTimeoutMS=2000&appName=mongosh+2.0.0'
 #"mongodb+srv://cscadmin:cscadmin@cluster0.bu8ylvz.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0"
