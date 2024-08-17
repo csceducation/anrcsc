@@ -9,7 +9,7 @@ def create(apps, schema_editor):
 class Migration(migrations.Migration):
 
     dependencies = [
-        ("revenue", "0002_gst"),
+        ("revenue", "0003_gst_gst_number"),
     ]
 
     operations = [migrations.RunPython(create)]
