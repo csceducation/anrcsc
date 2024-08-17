@@ -8,7 +8,7 @@ import datetime
 def default_site_config(apps, schema_editor):
     """Default site configurations"""
 
-    User.objects.create_superuser("vdmcsc", "vdmcsc4@gmail.com", "606001")
+    User.objects.create_superuser("anrcsc", "vdmcsc4@gmail.com", "608002")
     Config = apps.get_model("corecode", "SiteConfig")
     Config.objects.bulk_create(
         [
