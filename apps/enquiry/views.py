@@ -195,6 +195,7 @@ class StudentEnquiryCreateView(LoginRequiredMixin, SuccessMessageMixin, CreateVi
                 # Pre-fill the form fields based on the Enquiry instance
                 form.initial['name'] = enquiry_instance.name
                 form.initial['f_name'] = enquiry_instance.f_name
+                form.initial['m_name'] = enquiry_instance.m_name
                 form.initial['date_of_birth'] = enquiry_instance.date_of_birth
                 form.initial['address'] = enquiry_instance.address
                 form.initial['address1'] = enquiry_instance.address1

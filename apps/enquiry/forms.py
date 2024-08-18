@@ -108,7 +108,7 @@ class StudentEnquiryForm(forms.ModelForm):
         for field_name in optional_fields:
             self.fields[field_name].required = False
         # Group fields into sections
-        personal_info_fields = ['name', 'f_name','address','address1','address2','taluka', 'district','pincode', 'mobile_number', 'email','date_of_birth','student_role', 'student_company_name','gender']
+        personal_info_fields = ['name', 'f_name','m_name','address','address1','address2','taluka', 'district','pincode', 'mobile_number', 'email','date_of_birth','student_role', 'student_company_name','gender']
         qualification_fiedls = ['qualification', 'qualification_status', 'studying_year', 'studying_course','student_college_name']
         others_fields = [
             

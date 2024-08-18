@@ -216,6 +216,7 @@ class StudentEnquiryModel(models.Model):
         enquiry_no = models.CharField("Enquiry Number", max_length=20, unique=True, editable=False)
         name = models.CharField("Name", max_length=255, blank=False, default="")
         f_name = models.CharField("Father Name", max_length=255, blank=False, default="")
+        m_name = models.CharField("Mother Name", max_length=255, blank=False, default="")
         address = models.CharField("Address", max_length=255,default=None,blank=False)
         address1 = models.CharField("Address Line 2", max_length=255,default=None,blank=True,null=True)
         address2 = models.CharField("Address Line 3", max_length=255,default=None,blank=True,null=True)
