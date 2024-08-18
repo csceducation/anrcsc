@@ -211,5 +211,5 @@ CSRF_TRUSTED_ORIGINS = ['https://anr.csceducation.net']
 # Site Default values
 AUTH_USER_MODEL = 'corecode.User'
 db = 'cscadmin_anr'
-mongo_uri = 'mongodb://root:cscadmin123@localhost:27017/cscadmin_anr?authSource=admin'
+mongo_uri = 'mongodb://cscadmin_admin:Cscadmin123@localhost:27017/cscadmin_anr?authSource=admin'
 #"mongodb+srv://cscadmin:cscadmin@cluster0.bu8ylvz.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0"
