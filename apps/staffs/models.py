@@ -71,7 +71,7 @@ class Staff(models.Model):
             
             if not self.user:
                 self.user = User.objects.create_user(username=self.username,password=self.password,is_staff=True)
-                super().save(*args, **kwargs)
+            super().save(*args, **kwargs)
         elif not from_save_update:
             u = self.user
             self.user = None
