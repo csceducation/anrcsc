@@ -44,6 +44,9 @@ class SubjectForm(ModelForm):
     class Meta:
         model = Subject
         fields = ["name",'duration',"contents"]
+    def __init__(self, *args, **kwargs):
+        super(SubjectForm, self).__init__(*args, **kwargs)
+        self.fields['contents'].required = True
 class BookForm(ModelForm):
     prefix = "Book"
 
