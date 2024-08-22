@@ -34,7 +34,7 @@ def add_systems(request,**kwargs):
     lab = LabSystemModel.objects.get(id=kwargs.get("lab_id"))
     
     system_name = request.POST.get("system_name")
-
+    
     lab.append_system(system_name)
 
     return redirect(request.META.get('HTTP_REFERER', '/'))
