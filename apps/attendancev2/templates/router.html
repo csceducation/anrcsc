@@ -29,11 +29,19 @@
       object-fit: cover;
       border-radius: 10%;
     }
+    .mynow{
+      display: flex;
+      flex-wrap: wrap;
+    }
+    .mynow a{
+      width: 20%;
+      flex-basis: 180px;
+    }
   </style>
 
 
 <h1 class="text-align center mb-3">Attendance System</h1>
-  <div class="link-container">
+  <div class="link-container mynow">
     <a href="{% url 'theory_dashboard' %}" class="link">
       <img src="https://raw.githubusercontent.com/Senthilsk10/my-academic-files/main/toppng.com-dashboard-svg-icon-free-dashboard-icon-981x823.png" alt="Batch Attendance">
       <div>Theory Dashboard</div>
