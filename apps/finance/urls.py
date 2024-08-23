@@ -14,10 +14,12 @@ from .views import (
     dues_list,
     delete_due,
     extend_due,
+    update_due
 )
 
 urlpatterns = [
     path("bill/",save_bill_details,name="bill"),
+    path('due/<int:due_id>/update/', update_due, name='update_due'),
     path("list/", InvoiceListView.as_view(), name="invoice-list"),
     path("create/", InvoiceCreateView.as_view(), name="invoice-create"),
     path("<int:pk>/detail/", InvoiceDetailView.as_view(), name="invoice-detail"),

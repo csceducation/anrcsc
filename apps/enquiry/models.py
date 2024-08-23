@@ -69,7 +69,7 @@ class Enquiry(models.Model):
     
     # Office Use
     enquiry_date = models.DateField(default=timezone.now)
-    counsellor = models.ForeignKey(Staff,on_delete=models.DO_NOTHING,default=None)
+    counsellor = models.ForeignKey(Staff,on_delete=models.DO_NOTHING,limit_choices_to={'current_status': 'active'},default=None)
     counsellor_remark = models.TextField("Counsellor Remark", default="",null=True)
     enquiry_status = models.CharField(
         "Enquiry Status", choices=ENQUIRY_STATUS_CHOICES, max_length=1024, default="Following"

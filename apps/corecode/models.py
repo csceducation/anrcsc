@@ -47,8 +47,8 @@ class Subject(models.Model):
     """Subject"""
 
     name = models.CharField(max_length=200, unique=True)
-    duration = models.CharField(max_length=200,blank=True)
-    contents = models.TextField(blank=True, null=True)
+    duration = models.CharField("Duration (*In Hours)",max_length=200,blank=True)
+    contents = models.TextField("Content (*Enter line by line)",blank=True, null=True)
     
     def get_day_contents(self):
         cont_list = self.contents.splitlines()
@@ -88,7 +88,7 @@ class Exam(models.Model):
 
     name = models.CharField(max_length=200, unique=True,blank=True)
     exam_mode = models.CharField(max_length=255,choices=[("Online","online"),("Offline","Offline")],default="Offline")
-    exam_duration = models.CharField(max_length=200,blank=True)
+    exam_duration = models.CharField("Exam Duration (In  Minutes)",max_length=200,blank=True)
 
 
     class Meta:

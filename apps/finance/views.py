@@ -9,7 +9,8 @@ from apps.staffs.models import Staff
 from django.contrib import messages
 from django.http import JsonResponse
 from apps.students.models import Student
-
+from .models import Due
+from .forms import DueForm
 from .forms import InvoiceItemFormset, InvoiceReceiptFormSet, Invoices
 from .models import Invoice, InvoiceItem, Receipt, Due
 
@@ -209,7 +210,17 @@ def dues_list(request):
     dues = Due.objects.all()
     return render(request,"finance/dues.html",{"dues":dues})
     
-
+def update_due(request, due_id):
+    due = get_object_or_404(Due, id=due_id)
+    if request.method == 'POST':
+        form = DueForm(request.POST, instance=due)
+        if form.is_valid():
+            form.save()
+            return redirect('due_dashboard')  # Redirect to a detail view or list view
+    else:
+        form = DueForm(instance=due)
+    
+    return render(request, 'finance/due_update.html', {'form': form})
 
 def delete_due(request,**kwargs):
     pk = kwargs.get("pk")

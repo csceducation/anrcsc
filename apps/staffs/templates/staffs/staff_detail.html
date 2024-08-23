@@ -146,7 +146,9 @@ mark {
       <div class="row align-items-center flex-row-reverse">
           <div class="col-lg-7">
               <div class="about-text go-to">
-                  <h3 class="dark-color">{{object.name}}</h3><h5>{{object.staff_timing}} Faculty</h5>
+                  <h3 class="dark-color">{{object.name}}</h3>
+                  <h5> ID : {{object.id}}</h5>
+                  <h5>{{object.staff_timing}} Faculty</h5>
                   <h6 class="theme-color lead">Staff Role : {{object.staff_role}}</h6>
                   <h6 class="theme-color lead">Username : {{object.username}}</h6>
                   <h6 class="theme-color lead">Password : {{object.password}}</h6>
@@ -165,16 +167,7 @@ mark {
                               <label>Qualifications</label>
                               <p>{{object.quali}}</p>
                           </div>
-                          <div class="media">
-                              <label>Address</label>
-                              <p>{{object.address}}</p>
-                              <p>{{object.address1}}</p>
-                              <p>{{object.taluka}}</p>
-                              <p>{{object.district}} {{object.pincode}}</p>
-                              
-
-                              
-                          </div>
+                          
                       </div>
                       <div class="col-md-6">
                           <div class="media">
@@ -189,10 +182,16 @@ mark {
                               <label>From on</label>
                               <p>{{object.date_of_admission}}</p>
                           </div>
-                          <div class="media">
-                              <label>Id</label>
-                              <p>{{object.id}}</p>
-                          </div>
+                          
+                      </div>
+                      <div class="row">
+                        <div>
+                          <label>Address</label>
+                          <p>{{object.address}}</p>
+                          <p>{{object.address1}}</p>
+                          <p>{{object.taluka}}</p>
+                          <p>{{object.district}} {{object.pincode}}</p>
+                      </div>
                       </div>
                   </div>
               </div>

@@ -143,10 +143,11 @@ class Receipt(models.Model):
         bill = Bill.objects.filter().first()
 
 class Due(models.Model):
+    due_choice = [("Paid","Paid"),("Pending","Pending")]
+    due_status = models.TextField("Due Status",choices=due_choice,default="Pending",max_length=255)
     invoice = models.ForeignKey(Invoice, related_name='dues', on_delete=models.CASCADE)
     amount = models.DecimalField(max_digits=10, decimal_places=2)
     due_date = models.DateField()
-    extended = models.BooleanField(default=False)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 

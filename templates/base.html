@@ -305,6 +305,15 @@
               </a>
             </li>
             <li class="nav-item">
+              <a href="{% url 'due_dashboard' %}" class="nav-link">
+                <i class="nav-icon fas fa-calendar-check"></i>
+                <p>
+                  Due Bills
+                </p>
+              </a>
+            </li>
+            {% if request.user.is_superuser %}
+            <li class="nav-item">
               <a href="{% url 'today' %}" class="nav-link">
                 <i class="nav-icon fas fa-money-bill-alt"></i>
                 <p>
@@ -312,22 +321,8 @@
                 </p>
               </a>
             </li>
-            <li class="nav-item">
-              <a href="{% url 'month' %}" class="nav-link">
-                <i class="nav-icon fas fa-money-bill-alt"></i>
-                <p>
-                  This month Bills
-                </p>
-              </a>
-            </li>
-            <li class="nav-item">
-              <a href="{% url 'all' %}" class="nav-link">
-                <i class="nav-icon fas fa-money-bill-alt"></i>
-                <p>
-                  All bills
-                </p>
-              </a>
-            </li>
+            {% endif %}
+            
             
             
 

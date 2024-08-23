@@ -1,5 +1,5 @@
-from django.forms import inlineformset_factory, modelformset_factory
-
+from django.forms import inlineformset_factory, modelformset_factory ,ModelForm, Select,DateInput
+from .models import Due
 from .models import Invoice, InvoiceItem, Receipt
 
 InvoiceItemFormset = inlineformset_factory(
@@ -15,3 +15,14 @@ InvoiceReceiptFormSet = inlineformset_factory(
 )
 
 Invoices = modelformset_factory(Invoice, exclude=(), extra=4)
+
+
+
+class DueForm(ModelForm):
+    class Meta:
+        model = Due
+        fields = ['due_status', 'amount', 'due_date']
+        widgets = {
+            'due_status': Select(choices=Due.due_choice),
+            'due_date': DateInput(attrs={'type': 'date'}),
+        }

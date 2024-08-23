@@ -28,6 +28,6 @@ class AddStudentForm(forms.ModelForm):
         model = BatchModel
         fields = ['batch_students']
     batch_students = forms.ModelMultipleChoiceField(
-        queryset=Student.objects.all(),  # Replace YourStudentModel with the actual student model
-        widget=forms.SelectMultiple(attrs={'size': 20, 'style': 'width: 500px;'}),  # Adjust the width as needed
+        queryset=Student.objects.filter(current_status='active'),
+        widget=forms.CheckboxSelectMultiple
     )

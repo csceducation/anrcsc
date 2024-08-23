@@ -10,6 +10,7 @@ from django import forms
 from apps.course.models import *
 from apps.students.models import Classmodel
 from django.utils import timezone
+from apps.students.models import Student
 from apps.corecode.models import Time
 
 
@@ -38,11 +39,11 @@ class BatchDetailView(DetailView):
         return context
 class AddStudentView(View):
     template_name = 'batch/add_student.html'
-
+    student_detail = Student.objects.all()
     def get(self, request, *args, **kwargs):
         batch = get_object_or_404(BatchModel, pk=kwargs['pk'])
         add_student_form = AddStudentForm(instance=batch)
-        context = {'batch': batch, 'add_student_form': add_student_form}
+        context = {'batch': batch, 'add_student_form': add_student_form,'stu':self.student_detail}
         return render(request, self.template_name, context)
 
     def post(self, request, *args, **kwargs):

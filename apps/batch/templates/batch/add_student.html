@@ -8,8 +8,33 @@
 {% block content %}
 <form method="post" action="{% url 'add_student' batch.id %}">
   {% csrf_token %}
-  {{ add_student_form.as_p }}
+  <input type="text" name="student" id="student" class="form-control"  list="enquiry-list"  autocomplete="off">
+  <datalist id="enquiry-list">
+    {% for enquiry in stu %}
+            <option value="{{ enquiry.student_name }}({{ enquiry.enrol_no }}) {{ enquiry.id }}"></option>
+    {% endfor %}
+</datalist>
+
+  {{add_student_form}}
   <input type="submit" class="btn btn-primary" value="Add Students">
 </form>
 <a href="{% url 'batch_detail' batch.id %}" class="btn btn-secondary">Back to Batch Details</a>
+<script>
+  let elel = document.getElementsByName('batch_students')
+  
+  let textele = document.getElementById('student')
+  for (ele of elel){
+    if (ele.checked){
+      console.log(ele)
+    }
+    else{
+      ele.parentElement.style.display = 'none'
+    }
+    
+  }
+  textele.onchange = () => {
+      document.getElementById(`id_batch_students_${textele.value.split(" ")[1] - 1}`).parentElement.style.display = 'block'
+  }
+  
+</script>
 {% endblock content %}

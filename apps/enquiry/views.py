@@ -215,7 +215,8 @@ class StudentEnquiryCreateView(LoginRequiredMixin, SuccessMessageMixin, CreateVi
                 form.initial['need_of_study'] = enquiry_instance.need_of_study 
                 form.initial['known_csc'] = enquiry_instance.known_csc  
                 form.initial['course_to_join'] = enquiry_instance.course_to_join  
-                form.initial['new_course'] = enquiry_instance.new_course 
+                form.initial['new_course'] = enquiry_instance.new_course
+                form.initial['time_to_study'] = [t.id for t in enquiry.time_to_study.all()]
         except Enquiry.DoesNotExist:
                 raise Http404("Enquiry does not exist")
         return render(request, 'enquiry_form.html', {'form': form, 'enquiry_id': enquiry_id, 'enquiry': enquiry})

@@ -178,6 +178,7 @@ class StudentDetailView(LoginRequiredMixin, DetailView):
         context["classlog"] = Classmodel.objects.filter(student=self.object)
         context["examlog"] = Exammodel.objects.filter(student=self.object)
         context["certilog"] = Certificatemodel.objects.filter(student=self.object)
+        context['dues'] = Due.objects.all()
         return context
 
 @method_decorator(student_entry_resricted(),name='dispatch')
@@ -214,8 +215,7 @@ class StudentCreateView(LoginRequiredMixin, SuccessMessageMixin, CreateView):
                 def __init__(self, *args, **kwargs):
                     super().__init__(*args, **kwargs)
                     # Make the 'enquiry_id' field readonly
-                    
-                    
+           
                                 
 
 
@@ -258,6 +258,8 @@ class StudentCreateView(LoginRequiredMixin, SuccessMessageMixin, CreateView):
                 form.initial['taluka'] = enquiry_instance.taluka
                 form.initial['district'] = enquiry_instance.district
                 form.initial['pincode'] = enquiry_instance.pincode
+                form.initial['course'] = enquiry_instance.course_to_join
+                form.initial['class_time'] = [t.id for t in enquiry_instance.time_to_study.all()]
                 
 
         except Enquiry.DoesNotExist:
