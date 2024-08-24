@@ -233,6 +233,78 @@ mark {
           
         </div>
       </div>
+      <div class="table-responsive">
+        <caption>Ongoing Batches</caption>
+        <table id="studenttable" class="table table-bordered table-hover" data-page-length='100'>
+          <thead class="thead-light">
+            <tr>
+              <th>S/N</th>
+              <th>Batch Id</th>
+              <th>Batch status</th>
+              <th>Batch started On</th>
+              <th>Batch course</th>
+              <th>Batch Staff</th>
+              <th>Batch Timing</th>
+              <th>Total Student</th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody>
+    
+            {% for batch in batches %}
+            {% if batch.batch_staff.id == object.id and batch.batch_status == 'Active' %}
+              <tr class='clickable-row' data-href="{% url 'batch_detail' batch.id%}">
+                <td>{{ forloop.counter}}</td>
+                <td>{{ batch.batch_id}}</td>
+                <td>{{ batch.batch_status}}</td>
+                <td>{{ batch.batch_start_date}}</td>
+                <td>{{ batch.batch_course}}</td>
+                <td>{{ batch.batch_staff}}</td>
+                <td>{{ batch.batch_timing}}</td>
+                <td>{{ batch.total_student}}</td>
+              </tr>
+              {% endif %}
+            {% endfor %}
+    
+          </tbody>
+        </table>
+      </div>
+      <div class="table-responsive">
+        <caption>Completed Batches</caption>
+        <table id="studenttable" class="table table-bordered table-hover" data-page-length='100'>
+          <thead class="thead-light">
+            <tr>
+              <th>S/N</th>
+              <th>Batch Id</th>
+              <th>Batch status</th>
+              <th>Batch started On</th>
+              <th>Batch course</th>
+              <th>Batch Staff</th>
+              <th>Batch Timing</th>
+              <th>Total Student</th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody>
+    
+            {% for batch in batches %}
+            {% if batch.batch_staff.id == object.id and batch.batch_status == 'Inactive' %}
+              <tr class='clickable-row' data-href="{% url 'batch_detail' batch.id%}">
+                <td>{{ forloop.counter}}</td>
+                <td>{{ batch.batch_id}}</td>
+                <td>{{ batch.batch_status}}</td>
+                <td>{{ batch.batch_start_date}}</td>
+                <td>{{ batch.batch_course}}</td>
+                <td>{{ batch.batch_staff}}</td>
+                <td>{{ batch.batch_timing}}</td>
+                <td>{{ batch.total_student}}</td>
+              </tr>
+              {% endif %}
+            {% endfor %}
+    
+          </tbody>
+        </table>
+      </div>
   </div>
 
 

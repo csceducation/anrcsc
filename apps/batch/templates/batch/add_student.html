@@ -33,7 +33,7 @@
     
   }
   textele.onchange = () => {
-      document.getElementById(`id_batch_students_${textele.value.split(" ")[1] - 1}`).parentElement.style.display = 'block'
+      document.getElementById(`id_batch_students_${textele.value.split(" ")[textele.value.split(" ").length - 1] -1 }`).parentElement.style.display = 'block'
   }
   
 </script>

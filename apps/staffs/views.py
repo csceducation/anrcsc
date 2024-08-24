@@ -10,6 +10,7 @@ from .models import Staff
 from django.utils.decorators import method_decorator
 from apps.corecode.views import staff_student_entry_restricted,different_user_restricted
 from apps.corecode.models import User
+from apps.batch.models import BatchModel
 
 class StaffListView(ListView):
     model = Staff
@@ -18,13 +19,18 @@ class StaffListView(ListView):
 class StaffDetailView(DetailView):
     model = Staff
     template_name = "staffs/staff_detail.html"
-    
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        # Add the Batch model or queryset to the context
+        context['batches'] = BatchModel.objects.all()
+        return context
 
 @method_decorator(staff_student_entry_restricted(),name='dispatch')
 class StaffCreateView(SuccessMessageMixin, CreateView):
     model = Staff
     fields = "__all__"
     success_message = "New staff successfully added"
+    
 
     def get_form(self):
         """add date picker in forms"""

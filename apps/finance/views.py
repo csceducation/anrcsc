@@ -13,6 +13,7 @@ from .models import Due
 from .forms import DueForm
 from .forms import InvoiceItemFormset, InvoiceReceiptFormSet, Invoices
 from .models import Invoice, InvoiceItem, Receipt, Due
+from apps.staffs.models import Staff
 
 from apps.corecode.views import staff_student_entry_restricted
 from apps.corecode.models import Bill
@@ -56,7 +57,10 @@ def save_bill_details(request):
         bill_number = request.POST.get('bill_number')
         bill_date = request.POST.get('bill_date')
         amount = request.POST.get('amount')
-        re_by = request.POST.get('recived_by')
+        if request.user.is_superuser:
+            re_by = request.POST.get('recived_by')
+        elif request.user.is_staff:
+            re_by = Staff.objects.get(user_id=request.user.id).id
         comment = request.POST.get('comment')
         due_id = request.POST.get('due_id')
         next_due = request.POST.get('next_due_date')

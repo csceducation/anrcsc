@@ -53,8 +53,14 @@
             <td>{{ rec.invoice.student.enrol_no }}</td>
             <td>{{ rec.invoice.student.student_name }}</td>
             <td>{{rec.invoice.student.course}}</td>
+            {% if rec.gst_amount == None and rec.org_amount == None %}
+            <td>GST Not added</td>
+            <td>GST Not added</td>
+            {% else %}
             <td>{{rec.org_amount}}</td>
             <td>{{rec.gst_amount}}</td>
+            
+            {% endif %}
             <td>{{ rec.amount_paid }}</td>
 
           </tr>

@@ -89,8 +89,13 @@
       <td>{{ forloop.counter }}</td>
       <td>{{ receipt.Bill_No }}</td>
       <td>{{ receipt.amount_paid}}</td>
+      {% if receipt.gst_amount == None and receipt.org_amount == None %}
+      <td>GST Not added</td>
+      <td>GST Not added</td>
+      {% else %}
       <td>{{receipt.gst_amount}}</td>
       <td>{{receipt.org_amount}}</td>
+      {% endif %}
       <td>{{ receipt.date_paid}}</td>
       <td>{{receipt.received_by}}</td>
       <td>{{ receipt.comment}}</td>
