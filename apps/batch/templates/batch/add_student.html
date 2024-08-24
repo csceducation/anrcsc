@@ -33,7 +33,13 @@
     
   }
   textele.onchange = () => {
-      document.getElementById(`id_batch_students_${textele.value.split(" ")[textele.value.split(" ").length - 1] -1 }`).parentElement.style.display = 'block'
+      let getval = textele.value.split(" ")[textele.value.split(" ").length - 1]
+      let thele = document.getElementsByName('batch_students')
+      for(ele of thele){
+        if(ele.value == getval){
+          ele.parentElement.style.display = 'block'
+        }
+      }
   }
   
 </script>
