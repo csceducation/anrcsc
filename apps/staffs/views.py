@@ -1,4 +1,5 @@
 from django.contrib.messages.views import SuccessMessageMixin
+from django.db import IntegrityError
 from django.forms import widgets
 from django.shortcuts import render
 from django.urls import reverse_lazy
@@ -47,12 +48,35 @@ class StaffCreateView(SuccessMessageMixin, CreateView):
         form.fields["working_exp"].widget = widgets.Textarea(attrs={"rows": 1})
         return form
     def form_valid(self, form):
+        try:
         # Handle file uploads here
-        form.instance.passport = self.request.FILES.get('passport')
-        form.instance.aadhar_card = self.request.FILES.get('aadhar_card')
-        form.instance.degree_certificate = self.request.FILES.get('degree_certificate')
-        form.instance.resume = self.request.FILES.get('resume')
-        return super().form_valid(form)
+            form.instance.passport = self.request.FILES.get('passport')
+            form.instance.aadhar_card = self.request.FILES.get('aadhar_card')
+            form.instance.degree_certificate = self.request.FILES.get('degree_certificate')
+            form.instance.resume = self.request.FILES.get('resume')
+            user_data = {
+                    'username': form.cleaned_data.get('username'),
+                    'password': form.cleaned_data.get('password')  # Ensure password handling is secure
+                }
+                
+            if user_data['username']:
+                user, created = User.objects.get_or_create(username=user_data['username'])
+                if not created:
+                    form.add_error('username', 'Username already exists.')
+                    return self.form_invalid(form)
+                
+                if user_data['password']:
+                    user.set_password(user_data['password'])
+                    user.save()
+                
+                form.instance.user = user
+
+            return super().form_valid(form)
+    
+        except IntegrityError:
+            form.add_error(None, 'An unexpected error occurred.')
+            return self.form_invalid(form)
+
     
 
 
