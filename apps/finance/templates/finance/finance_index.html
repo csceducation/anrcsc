@@ -77,15 +77,20 @@
         </div>
       </div>
 
-      <h3>Course-wise Admissions and Enquiries Overview</h3>
+      <h3>Course-wise Admissions, Enquiries Overview, and Batch Status</h3>
       <div class="row">
-        <div class="col-md-6">
+        <div class="col-md-4">
           <div id="piechart" class="mb-4" style="height: 400px;"></div>
         </div>
-        <div class="col-md-6">
+        <div class="col-md-4">
           {% if enquiry_data %}
           <div id="enquiryPieChart" class="mb-4" style="height: 400px;"></div>
+          {% else %}
+          <p>No enquiry data available.</p>
           {% endif %}
+        </div>
+        <div class="col-md-4">
+          <div id="batchPieChart" class="mb-4" style="height: 400px;"></div>
         </div>
       </div>
 
@@ -131,49 +136,66 @@
 <script type="text/javascript">
   google.charts.load('current', {'packages':['corechart']});
   google.charts.setOnLoadCallback(() => {
-    const data = new google.visualization.DataTable();
-    data.addColumn('string', 'Status');
-    data.addColumn('number', 'Count');
-    data.addRows([
-      ['Admitted', {{ enquiry_data.admitted|default:0 }}],
-      ['Following', {{ enquiry_data.following|default:0 }}],
-      ['Dropped', {{ enquiry_data.dropped|default:0 }}]
-    ]);
-
-    const options = {
-      title: 'Enquiries by Status',
-      pieHole: 0.4,
-      slices: { 0: { offset: 0.1 } },
-      legend: { position: 'bottom' }
-    };
-
-    const chart = new google.visualization.PieChart(document.getElementById('enquiryPieChart'));
-    chart.draw(data, options);
-  });
-</script>
-
-<script type="text/javascript">
-  google.charts.load('current', {'packages':['corechart']});
-  google.charts.setOnLoadCallback(() => {
-    const data = new google.visualization.DataTable();
-    data.addColumn('string', 'Course');
-    data.addColumn('number', 'Admissions');
-
-    data.addRows([
+    // Draw the Course-wise Admissions Pie Chart
+    const courseData = new google.visualization.DataTable();
+    courseData.addColumn('string', 'Course');
+    courseData.addColumn('number', 'Admissions');
+    courseData.addRows([
       {% for course in course_admissions %}
       ['{{ course.course__course_name }}', {{ course.admission_count }}],
       {% endfor %}
     ]);
 
-    const options = {
+    const courseOptions = {
       title: 'Course-wise Admissions',
       pieHole: 0.4,
       slices: { 0: { offset: 0.1 } },
       legend: { position: 'bottom' }
     };
 
-    const chart = new google.visualization.PieChart(document.getElementById('piechart'));
-    chart.draw(data, options);
+    const courseChart = new google.visualization.PieChart(document.getElementById('piechart'));
+    courseChart.draw(courseData, courseOptions);
+
+    // Draw the Enquiries Overview Pie Chart
+    if (true) {
+      const enquiryData = new google.visualization.DataTable();
+      enquiryData.addColumn('string', 'Status');
+      enquiryData.addColumn('number', 'Count');
+      enquiryData.addRows([
+        ['Admitted', {{ enquiry_data.admitted|default:0 }}],
+        ['Following', {{ enquiry_data.following|default:0 }}],
+        ['Dropped', {{ enquiry_data.dropped|default:0 }}]
+      ]);
+
+      const enquiryOptions = {
+        title: 'Enquiries by Status',
+        pieHole: 0.4,
+        slices: { 0: { offset: 0.1 } },
+        legend: { position: 'bottom' }
+      };
+
+      const enquiryChart = new google.visualization.PieChart(document.getElementById('enquiryPieChart'));
+      enquiryChart.draw(enquiryData, enquiryOptions);
+    }
+
+    // Draw the Batch Status Pie Chart
+    const batchData = new google.visualization.DataTable();
+    batchData.addColumn('string', 'Status');
+    batchData.addColumn('number', 'Count');
+    batchData.addRows([
+      ['Completed', {{ batch_data.completed }}],
+      ['Not Completed', {{ batch_data.not_completed }}]
+    ]);
+
+    const batchOptions = {
+      title: 'Batch Status',
+      pieHole: 0.4,
+      slices: { 0: { offset: 0.1 } },
+      legend: { position: 'bottom' }
+    };
+
+    const batchChart = new google.visualization.PieChart(document.getElementById('batchPieChart'));
+    batchChart.draw(batchData, batchOptions);
   });
 </script>
 

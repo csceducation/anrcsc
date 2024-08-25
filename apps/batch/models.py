@@ -62,13 +62,14 @@ class BatchModel(models.Model):
     def get_attendance_data(self, date):
         manager = AttendanceManager(db)
         doc = manager.get_theory_data(self.id, date)
-        for enrol_no, status in doc['students'].items():
-            doc['students'][enrol_no] = {
-                'name': self.map_name(enrol_no),
-                'status': status
-            }
-        #print(doc)
-        return doc
+        if doc:
+            for enrol_no, status in doc['students'].items():
+                doc['students'][enrol_no] = {
+                    'name': self.map_name(enrol_no),
+                    'status': status
+                }
+            #print(doc)
+            return doc
 
     def finished_topics(self):
         manager = AttendanceManager(db)

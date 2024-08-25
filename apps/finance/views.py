@@ -18,7 +18,8 @@ from apps.enquiry.models import Enquiry
 from apps.corecode.views import staff_student_entry_restricted
 from apps.corecode.models import Bill
 from django.db.models import Count, Sum
-from datetime import datetime
+from django.utils import timezone
+from apps.batch.models import BatchModel
 
 class InvoiceListView(LoginRequiredMixin, ListView):
     model = Invoice
@@ -246,6 +247,7 @@ def extend_due(request,**kwargs):
 def dashboard_view(request):
     start_date = request.GET.get('start_date')
     end_date = request.GET.get('end_date')
+    today = timezone.now().strftime('%Y-%m-%d')
     
 
     if start_date and end_date:
@@ -261,6 +263,20 @@ def dashboard_view(request):
             }
         else:
             enquiry_data = {}
+            
+        batches = BatchModel.objects.filter(batch_status = "Active")
+        batch_count = batches.count()
+        #print(batch_count)
+        completed = 0
+        for batch in batches:
+            if batch.get_attendance_data(today):
+                completed += 1
+        batch_data = {
+            'total':batch_count,
+            'completed':completed,
+            'not_completed':(batch_count-completed)
+        }
+        
 
         total_invoice_amount = sum(invoice.total_amount_payable() for invoice in invoices)
         
@@ -282,7 +298,8 @@ def dashboard_view(request):
             'cr_percent':cr_percent,
             'course_admissions': course_admissions,
             'students':students,
-            'enquiry_data':enquiry_data
+            'enquiry_data':enquiry_data,
+            'batch_data':batch_data
         }
 
 
