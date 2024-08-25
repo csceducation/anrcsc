@@ -155,8 +155,10 @@ class IndexView(LoginRequiredMixin, TemplateView):
             total_admissions = students.count()
             
             avg_invoice_amount = total_invoice_amount / total_admissions if total_admissions > 0 else 0
-            
-            cr_percent = round((total_collected_amount/total_invoice_amount) * 100,2)
+            if  total_invoice_amount != 0:
+                cr_percent = round((total_collected_amount/total_invoice_amount) * 100,2)
+            else:
+                cr_percent = 0
 
             course_admissions = students.values('course__course_name').annotate(admission_count=Count('course')).order_by('-admission_count')
             
