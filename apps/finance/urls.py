@@ -14,7 +14,8 @@ from .views import (
     dues_list,
     delete_due,
     extend_due,
-    update_due
+    update_due,
+    dashboard_view
 )
 
 urlpatterns = [
@@ -34,4 +35,5 @@ urlpatterns = [
     path('dues',dues_list,name="due_dashboard"),
     path('delete_dues/<int:pk>/',delete_due,name="delete_due"),
     path('extend_dues/<int:pk>',extend_due,name="extend_due"),
+    path('dashboard',dashboard_view,name = "finance_dashboard")
 ]

@@ -22,16 +22,16 @@ class Invoice(models.Model):
 
     def __str__(self):
         return f"{self.student}"
-
+    
     def balance(self):
         return self.total_amount_payable() - self.total_amount_paid()
-
+    
     def amount_payable(self):
         return sum(item.amount for item in InvoiceItem.objects.filter(invoice=self))
-
+    
     def total_amount_payable(self):
         return self.amount_payable()
-
+    
     def total_amount_paid(self):
         return sum(receipt.amount_paid for receipt in Receipt.objects.filter(invoice=self))
 

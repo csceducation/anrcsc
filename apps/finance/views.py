@@ -14,9 +14,11 @@ from .forms import DueForm
 from .forms import InvoiceItemFormset, InvoiceReceiptFormSet, Invoices
 from .models import Invoice, InvoiceItem, Receipt, Due
 from apps.staffs.models import Staff
-
+from apps.enquiry.models import Enquiry
 from apps.corecode.views import staff_student_entry_restricted
 from apps.corecode.models import Bill
+from django.db.models import Count, Sum
+from datetime import datetime
 
 class InvoiceListView(LoginRequiredMixin, ListView):
     model = Invoice
@@ -238,3 +240,51 @@ def extend_due(request,**kwargs):
         due = Due.objects.get(id=pk)
         due.extend_due(date_to_extend)
         return redirect("due_dashboard")
+    
+  
+
+def dashboard_view(request):
+    start_date = request.GET.get('start_date')
+    end_date = request.GET.get('end_date')
+    
+
+    if start_date and end_date:
+        students = Student.objects.filter(date_of_admission__range=[start_date, end_date])
+        invoices = Invoice.objects.filter(student__in=students)
+        enquiries = Enquiry.objects.filter(enquiry_date__range=[start_date,end_date])
+        if enquiries:
+            enquiry_data = {
+                'total': enquiries.count(),
+                'admitted': enquiries.filter(enquiry_status='Admitted').count(),
+                'following': enquiries.filter(enquiry_status='Following').count(),
+                'dropped': enquiries.filter(enquiry_status='Rejected').count()
+            }
+        else:
+            enquiry_data = {}
+
+        total_invoice_amount = sum(invoice.total_amount_payable() for invoice in invoices)
+        
+        total_collected_amount = invoices.aggregate(Sum('receipt__amount_paid'))['receipt__amount_paid__sum'] or 0
+        
+        total_admissions = students.count()
+        
+        avg_invoice_amount = total_invoice_amount / total_admissions if total_admissions > 0 else 0
+        
+        cr_percent = round((total_collected_amount/total_invoice_amount) * 100,2)
+
+        course_admissions = students.values('course__course_name').annotate(admission_count=Count('course')).order_by('-admission_count')
+        
+        context = {
+            'total_invoices':total_admissions,
+            'total_invoice_amount': total_invoice_amount,
+            'total_collected_amount': total_collected_amount,
+            'average_per_admission': round(avg_invoice_amount,2),
+            'cr_percent':cr_percent,
+            'course_admissions': course_admissions,
+            'students':students,
+            'enquiry_data':enquiry_data
+        }
+
+
+        return render(request, 'finance/finance_index.html', context)
+    return render(request,'finance/finance_index.html')
