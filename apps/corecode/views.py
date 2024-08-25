@@ -40,6 +40,23 @@ from apps.finance.models import Invoice
 from apps.enquiry.models import Enquiry
 from apps.batch.models import BatchModel
 from django.db.models import Sum,Count 
+import datetime
+
+def get_month_start_end(date=None):
+    """Gets the start and end date of the month for the given date. 
+    If no date is given, it defaults to today.
+    """
+    if date is None:
+        date = datetime.date.today()
+
+    # Get the first day of the month
+    start_date = datetime.date(date.year, date.month, 1)
+
+    # Get the last day of the month
+    next_month = date.replace(day=28) + datetime.timedelta(days=4)  # Go to next month
+    end_date = next_month - datetime.timedelta(days=next_month.day)
+
+    return start_date, end_date
 
 
 
@@ -118,8 +135,9 @@ class IndexView(LoginRequiredMixin, TemplateView):
         start_date = request.GET.get('start_date')
         end_date = request.GET.get('end_date')
         today = timezone.now().strftime('%Y-%m-%d')
-        
-
+        if not start_date or not end_date:
+            start_date,end_date = get_month_start_end()
+            
         if start_date and end_date:
             students = Student.objects.filter(date_of_admission__range=[start_date, end_date])
             invoices = Invoice.objects.filter(student__in=students)

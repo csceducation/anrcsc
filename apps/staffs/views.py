@@ -25,7 +25,7 @@ class StaffDetailView(DetailView):
     def get_context_data(self, **kwargs):
         filter = self.request.GET.get('month')
         year,month = datetime.now().year,datetime.now().month
-        if month:
+        if filter:
             year,month = filter.split('-')
         context = super().get_context_data(**kwargs)
         # Add the Batch model or queryset to the context

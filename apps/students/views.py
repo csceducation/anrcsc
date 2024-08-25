@@ -1,4 +1,5 @@
 import csv
+from django.core.exceptions import ValidationError
 from django.contrib.auth.mixins import AccessMixin
 from datetime import datetime
 from django import forms
@@ -40,6 +41,7 @@ from apps.attendancev2.dashboard import DashboardManager
 from apps.attendancev2.manager import AttendanceManager
 from django.core.serializers import serialize
 from csc_app.settings import db
+from apps.corecode.models import User
 
 def generate_student_id_card(request,student_id):
         # Create a blank image
@@ -215,6 +217,7 @@ class StudentCreateView(LoginRequiredMixin, SuccessMessageMixin, CreateView):
                 def __init__(self, *args, **kwargs):
                     super().__init__(*args, **kwargs)
                     # Make the 'enquiry_id' field readonly
+                    
            
                                 
 
@@ -270,6 +273,7 @@ class StudentCreateView(LoginRequiredMixin, SuccessMessageMixin, CreateView):
 
     def get_form(self, form_class=None):
         form = super().get_form(form_class)
+        del form.fields['user']
         
         # Retrieve the enquiry_id from the URL parameters
         # Add date pickers and customize widgets
@@ -290,9 +294,15 @@ class StudentCreateView(LoginRequiredMixin, SuccessMessageMixin, CreateView):
                 class Meta:
                     model = Student
                     fields = '__all__'
+                    
+                def clean_username(self):
+                    username = self.cleaned_data.get('username')
+                    if User.objects.filter(username=username).exists():
+                        raise ValidationError("Username already exists.")
+                    return username
 
             form = StudentForm(request.POST,request.FILES)
-            
+            del form.fields['user']
             if form.is_valid():
                 if 'passport' in request.FILES:
                     form.cleaned_data['passport'] = request.FILES['passport']
@@ -300,9 +310,14 @@ class StudentCreateView(LoginRequiredMixin, SuccessMessageMixin, CreateView):
             
 
 
-            return render(request, self.template_name, {'form': form, 'enquiry_id': enquiry_id, 'enquiry': enquiry})
+            return render(request, 'students/student_form.html', {'form': form, 'enquiry_id': enquiry_id, 'enquiry': enquiry})
 
     def form_valid(self, form):
+        
+            username = form.cleaned_data.get('username')
+            if User.objects.filter(username=username).exists():
+                form.add_error('username', "Username already exists.")
+                return self.form_invalid(form)
             # Additional logic after the form is valid
             response = super().form_valid(form)
             total_fee = form.cleaned_data.get('total_fee', 0)
@@ -319,6 +334,14 @@ class StudentCreateView(LoginRequiredMixin, SuccessMessageMixin, CreateView):
                 object1.enquiry_status = "Admitted"
                 object1.save()
             return response
+        
+    def form_invalid(self, form):
+        # Remove the 'username' field from the form if needed
+        del form.fields['user']
+        
+        # Render the form with errors
+        return self.render_to_response(self.get_context_data(form=form))
+
     
 def Studentdashboard(request):
     return render(request,"students/student_dashboard.html")
