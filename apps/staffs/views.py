@@ -12,7 +12,9 @@ from django.utils.decorators import method_decorator
 from apps.corecode.views import staff_student_entry_restricted,different_user_restricted
 from apps.corecode.models import User
 from apps.batch.models import BatchModel
-
+from apps.attendancev2.manager import DailyAttendanceManager
+from csc_app.settings import db
+from datetime import datetime
 class StaffListView(ListView):
     model = Staff
 
@@ -21,9 +23,17 @@ class StaffDetailView(DetailView):
     model = Staff
     template_name = "staffs/staff_detail.html"
     def get_context_data(self, **kwargs):
+        filter = self.request.GET.get('month')
+        year,month = datetime.now().year,datetime.now().month
+        if month:
+            year,month = filter.split('-')
         context = super().get_context_data(**kwargs)
         # Add the Batch model or queryset to the context
-        context['batches'] = BatchModel.objects.all()
+        context['batches'] = BatchModel.objects.filter(batch_staff = self.object)
+        manager = DailyAttendanceManager(db)
+        attendance_data = manager.get_single_staff_details(self.object.id,int(month),int(year))
+        context['attendance'] = attendance_data
+        print(attendance_data)
         return context
 
 @method_decorator(staff_student_entry_restricted(),name='dispatch')

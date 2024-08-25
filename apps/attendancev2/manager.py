@@ -1,6 +1,7 @@
 import pymongo
 import datetime
 from csc_app.settings import mongo_uri
+from apps.staffs.models import Staff
 
 class AttendanceManager:
     def __init__(self,mongodb_database):
@@ -312,3 +313,31 @@ class DailyAttendanceManager:
         )
 
 
+    def get_single_staff_details(self, staff_id, month, year):
+        query = {
+            'date': {
+                '$gte': datetime.datetime(year, month, 1).strftime('%Y-%m-%d'),
+                '$lt': datetime.datetime(year, month + 1, 1).strftime('%Y-%m-%d') if month < 12 else datetime(year + 1, 1, 1).strftime('%Y-%m-%d')
+            }
+        }
+        print(query)
+        documents = self.staff_collection.find(query)
+
+        staff_details = []
+        for document in documents:
+            print(document,"from manager")
+            attendance_data = document.get('attendance', {}).get(str(staff_id), {})
+            if attendance_data:
+                try:
+                    staff = Staff.objects.get(id=int(staff_id))
+                    staff_details.append({
+                        'staff_id': staff.id,
+                        'name': staff.username,
+                        'date': document.get('date'),
+                        'entry_time': attendance_data.get("entry_time", ""),
+                        'exit_time': attendance_data.get("exit_time", "")
+                    })
+                except Staff.DoesNotExist:
+                    continue  
+
+        return staff_details

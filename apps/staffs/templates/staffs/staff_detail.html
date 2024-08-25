@@ -234,7 +234,7 @@ mark {
         </div>
       </div>
       <div class="table-responsive">
-        <caption>Ongoing Batches</caption>
+        <h2><caption>Ongoing Batches</caption></h2>
         <table id="studenttable" class="table table-bordered table-hover" data-page-length='100'>
           <thead class="thead-light">
             <tr>
@@ -269,8 +269,9 @@ mark {
           </tbody>
         </table>
       </div>
+
       <div class="table-responsive">
-        <caption>Completed Batches</caption>
+        <h2><caption>Completed Batches</caption></div></h2>
         <table id="studenttable" class="table table-bordered table-hover" data-page-length='100'>
           <thead class="thead-light">
             <tr>
@@ -305,7 +306,43 @@ mark {
           </tbody>
         </table>
       </div>
-  </div>
 
+
+      
+
+      <div class="table-responsive">
+        <h2><caption>Attendance Data</caption></h2>
+        <form method="get">
+          <div class="form-group">
+              <label for="month">Select Month:</label>
+              <input type="month" id="month" name="month" class="form-control w-50" value="{{ form.initial.month }}-{{ form.initial.year }}">
+          </div>
+          <button type="submit" class="btn btn-primary">select month</button>
+        </form>
+          <table class="table table-striped table-bordered">
+            <thead>
+                <tr>
+                    <th scope="col">Staff ID</th>
+                    <th scope="col">Name</th>
+                    <th scope="col">Date</th>
+                    <th scope="col">Entry Time</th>
+                    <th scope="col">Exit Time</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for record in attendance %}
+                <tr>
+                    <td>{{ record.staff_id }}</td>
+                    <td>{{ record.name }}</td>
+                    <td>{{ record.date }}</td>
+                    <td>{{ record.entry_time }}</td>
+                    <td>{{ record.exit_time }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        
+        </div>
+  </div>
 
 {% endblock content %}

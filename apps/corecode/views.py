@@ -33,6 +33,16 @@ from .models import (
 )
 from apps.revenue.models import GST
 
+#---dashboard--
+from django.utils import timezone
+from apps.students.models import Student
+from apps.finance.models import Invoice
+from apps.enquiry.models import Enquiry
+from apps.batch.models import BatchModel
+from django.db.models import Sum,Count 
+
+
+
 """
 decorators and page access functions
 """
@@ -102,10 +112,70 @@ def staff_student_entry_restricted():
 Views
 """
 
-
 @method_decorator(student_entry_resricted(),name='dispatch')
 class IndexView(LoginRequiredMixin, TemplateView):
     def index(request):
+        start_date = request.GET.get('start_date')
+        end_date = request.GET.get('end_date')
+        today = timezone.now().strftime('%Y-%m-%d')
+        
+
+        if start_date and end_date:
+            students = Student.objects.filter(date_of_admission__range=[start_date, end_date])
+            invoices = Invoice.objects.filter(student__in=students)
+            enquiries = Enquiry.objects.filter(enquiry_date__range=[start_date,end_date])
+            if enquiries:
+                enquiry_data = {
+                    'total': enquiries.count(),
+                    'admitted': enquiries.filter(enquiry_status='Admitted').count(),
+                    'following': enquiries.filter(enquiry_status='Following').count(),
+                    'dropped': enquiries.filter(enquiry_status='Rejected').count()
+                }
+            else:
+                enquiry_data = {}
+                
+            batches = BatchModel.objects.filter(batch_status = "Active")
+            batch_count = batches.count()
+            #print(batch_count)
+            completed = 0
+            for batch in batches:
+                if batch.get_attendance_data(today):
+                    completed += 1
+            batch_data = {
+                'total':batch_count,
+                'completed':completed,
+                'not_completed':(batch_count-completed)
+            }
+            
+
+            total_invoice_amount = sum(invoice.total_amount_payable() for invoice in invoices)
+            
+            total_collected_amount = invoices.aggregate(Sum('receipt__amount_paid'))['receipt__amount_paid__sum'] or 0
+            
+            total_admissions = students.count()
+            
+            avg_invoice_amount = total_invoice_amount / total_admissions if total_admissions > 0 else 0
+            
+            cr_percent = round((total_collected_amount/total_invoice_amount) * 100,2)
+
+            course_admissions = students.values('course__course_name').annotate(admission_count=Count('course')).order_by('-admission_count')
+            
+            context = {
+                'dashboard':True,
+                'total_invoices':total_admissions,
+                'total_invoice_amount': total_invoice_amount,
+                'total_collected_amount': total_collected_amount,
+                'average_per_admission': round(avg_invoice_amount,2),
+                'cr_percent':cr_percent,
+                'course_admissions': course_admissions,
+                'students':students,
+                'enquiry_data':enquiry_data,
+                'batch_data':batch_data
+            }
+
+
+            return render(request, 'index.html', context)
+        #return render(request,'finance/finance_index.html')
         return render(request,"index.html",context={
             "total_student":views.total_student,
             "total_income":views.total_income,
