@@ -153,15 +153,19 @@ USE_TZ = True
 
 DATA_UPLOAD_MAX_NUMBER_FIELDS = 10240
 
-STATIC_URL = "/static/"
+STATIC_URL = '/static/'
 
-STATICFILES_DIRS = (os.path.join(BASE_DIR, "static"),)
+MEDIA_URL = '/media/'
 
-STATIC_ROOT = os.path.join(BASE_DIR, "staticfiles")
+if DEBUG:
 
-MEDIA_ROOT = os.path.join(BASE_DIR, "media")
+    STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static')]
 
-MEDIA_URL = "/media/"
+else:
+
+    STATIC_ROOT = os.path.join(BASE_DIR, 'static')
+
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 LOGIN_REDIRECT_URL = "/redirector" #before it was "/" now we redirect them to this view and further separate users and redirect according to their roles
 

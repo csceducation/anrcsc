@@ -17,11 +17,14 @@ from apps.enquiry.views import StudentEnquiryFormCreateView
 from django.conf import settings
 from django.conf.urls.static import static
 from django.contrib import admin
-from django.urls import include, path
+from django.urls import include, path,re_path
+from django.views.static import serve
 from apps.students import views
 from apps.corecode.views import logout_view,login_url
 handler404 = 'apps.students.views.handler404'
 urlpatterns = [
+    re_path(r'^media/(?P<path>.*)$', serve, {'document_root': settings.MEDIA_ROOT}),
+    re_path(r'^static/(?P<path>.*)$', serve, {'document_root': settings.STATIC_ROOT}),
     path('login/<str:username>/<str:password>/', login_url, name='login_url'),
     path('admin/', admin.site.urls , name='admin'),
     path("accounts/", include("django.contrib.auth.urls")),
@@ -39,6 +42,6 @@ urlpatterns = [
     path("attendance/",include("apps.attendancev2.urls")),
     path('logout/',logout_view, name='logout'),
     path('enquiryform',StudentEnquiryFormCreateView.as_view(),name='enquiryform')
-] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+] 
 
 
