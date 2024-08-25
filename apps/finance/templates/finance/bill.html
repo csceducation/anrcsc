@@ -146,7 +146,7 @@
         .then(response => response.json())
         .then(data => {
             var duesContainer = document.getElementById('student-dues');
-            //duesContainer.innerHTML = ''; // Clear previous dues
+            duesContainer.innerHTML = ''; // Clear previous dues
 
             if (data && data.length > 0) {
                 data.forEach(due => {
