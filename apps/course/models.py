@@ -5,7 +5,7 @@ class CourseModel(models.Model):
     status = models.CharField("Course Status",max_length=255,choices = [("Active","Active"),("Inactive","Inactive")] , default="Active")
     course_name  = models.CharField("Course Full Name",max_length=1024,default="",null=False)
     course_s_name  = models.CharField("Course Short Name",max_length=1024,default="",null=False)
-    course_duration = models.CharField("Course Duration (* In Minutes)",max_length=255,default= None)
+    course_duration = models.CharField("Course Duration (* In Hours)",max_length=255,default= None)
     course_fee = models.IntegerField("Course Fee")
     def get_absolute_url(self):
         return reverse("details_course", kwargs={"pk": self.pk})

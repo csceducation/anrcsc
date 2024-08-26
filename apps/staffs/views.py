@@ -111,11 +111,6 @@ class StaffUpdateView(SuccessMessageMixin, UpdateView):
         form.fields["working_exp"].widget = widgets.Textarea(attrs={"rows": 1})
         return form
     def form_valid(self, form):
-        # Handle file uploads here
-        form.instance.passport = self.request.FILES.get('passport')
-        form.instance.aadhar_card = self.request.FILES.get('aadhar_card')
-        form.instance.degree_certificate = self.request.FILES.get('degree_certificate')
-        form.instance.resume = self.request.FILES.get('resume')
         return super().form_valid(form)
     def save(self, *args, **kwargs):
         # Delete previous images before saving new ones

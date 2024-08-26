@@ -10,7 +10,7 @@ class CourseModelForm(forms.ModelForm):
         super(CourseModelForm, self).__init__(*args, **kwargs)
         # Add any customizations to form fields here, if needed
         # For example, you can set placeholders, additional attributes, etc.
-        self.fields['course_duration'].widget.attrs['placeholder'] = 'Enter course duration in Months'
+        self.fields['course_duration'].widget.attrs['placeholder'] = 'Enter course duration in Hours'
         self.fields['course_name'].widget.attrs['placeholder'] = 'Enter Full name of the Course'
         self.fields['course_s_name'].widget.attrs['placeholder'] = "Enter the short  name of course"
  
