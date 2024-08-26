@@ -61,5 +61,13 @@
         e.target.value = e.target.value.toUpperCase();
     }
 });
+let usernamep = document.getElementById('id_username')
+
+usernamep.disabled = true
+
+document.getElementById('id_enrol_no').oninput = () => {
+  usernamep.value = document.getElementById('id_enrol_no').value
+}
+
 </script>
 {% endblock content %}
